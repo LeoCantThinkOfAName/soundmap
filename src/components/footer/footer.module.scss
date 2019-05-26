@@ -1,0 +1,30 @@
+@import "../../styles/variable.scss";
+
+.footer {
+  background: inherit;
+  bottom: 0;
+  box-shadow: 0 0 1px rgba($black, 0.2);
+  box-sizing: border-box;
+  left: 0;
+  padding: 0.5rem;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+
+  p {
+    font-size: 0.8rem;
+    margin: 0;
+    text-align: center;
+  }
+
+  a {
+    color: $theme;
+    text-decoration: none;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  .footer {
+    box-shadow: 0 0 5px rgba($black, 0.2);
+  }
+}

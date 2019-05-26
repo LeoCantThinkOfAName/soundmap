@@ -1,20 +1,18 @@
 import React from "react";
 
-// context
-
-interface Proptypes {
-  children: JSX.Element;
-}
+// contexts
+import MainProvider from "./MainContext";
+import UserProvider from "./UserContext";
 
 function ProviderComposer({
   contexts,
   children,
 }: {
   contexts: any;
-  children: Proptypes;
+  children: any;
 }) {
   return contexts.reduceRight(
-    (kids: Proptypes, parent: any) =>
+    (kids: any, parent: any) =>
       React.cloneElement(parent, {
         children: kids,
       }),
@@ -22,8 +20,12 @@ function ProviderComposer({
   );
 }
 
-function ContextProvider({ children }: { children: Proptypes }) {
-  return <ProviderComposer contexts={[]}>{children}</ProviderComposer>;
+function ContextProvider({ children }: { children: any }) {
+  return (
+    <ProviderComposer contexts={[<MainProvider />, <UserProvider />]}>
+      {children}
+    </ProviderComposer>
+  );
 }
 
 export { ContextProvider };

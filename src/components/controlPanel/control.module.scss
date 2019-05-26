@@ -15,7 +15,7 @@
 .control-panel {
   animation: init 2s cubic-bezier(0.47, 0.22, 0.13, 0.89) 1 forwards;
   background: rgba($white, 1);
-  bottom: 0;
+  bottom: 2rem;
   box-shadow: 0 0 5px rgba($black, 0.2);
   display: flex;
   height: 8rem;
@@ -109,7 +109,7 @@
 
 @media screen and (min-width: 720px) {
   .control-panel {
-    bottom: 5vh;
+    bottom: 5rem;
     height: 10rem;
   }
 

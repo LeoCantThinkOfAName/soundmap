@@ -2,6 +2,7 @@ import React from "react";
 
 // styles
 import style from "./header.module.scss";
+import Oauth from "./../oauth/Oauth";
 
 // assets
 import logo from "../../images/soundmap.svg";
@@ -12,6 +13,7 @@ export default function Header() {
       <div className={style["header-wrapper"]}>
         <img src={logo} alt="taipei sound map" />
       </div>
+      <Oauth />
     </header>
   );
 }

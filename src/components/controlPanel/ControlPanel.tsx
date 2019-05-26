@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+
+// context
+import { MainContext } from "./../../context/MainContext";
 
 // styles
 import style from "./control.module.scss";
 
+declare global {
+  interface Window {
+    AudioContext: any;
+    webkitAudioContext: any;
+  }
+}
+
 export default function ControlPanel() {
+  const { current } = useContext(MainContext);
+  const [buffered, setBuffered] = useState(true);
+  const [audio, setAudio] = useState(null);
+  const player = useRef<any>(null);
+
+  useEffect(() => {
+    player.current.addEventListener("playing", () => {
+      try {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        setAudio(new AudioContext());
+        console.log(audio);
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  }, []);
+
+  const handlePlayback = () => {
+    if (buffered) {
+      player.current.paused ? player.current.play() : player.current.pause();
+    }
+  };
+
   return (
     <div className={style["control-panel"]}>
       <div className={style["thumbnail-wrapper"]}>
@@ -17,10 +50,14 @@ export default function ControlPanel() {
         <div className={style["info"]}>
           <div>
             <h5 className={style["title"]}>
-              Taipei Main Station Whahahahahaha hello how are you
+              {current ? current.name : "Select a location to play."}
             </h5>
-            <p className={style["date"]}>05/30 2019 (SAT) 7:00 PM</p>
-            <p className={style["date"]}>LCTOAN.</p>
+            <p className={style["date"]}>
+              {current ? current.date : "00/00/0000 ( ) 00:00"}
+            </p>
+            <p className={style["date"]}>
+              {current ? current.author : "Noname"}
+            </p>
           </div>
           <div>
             <button className={style["like-btn"]} title="Lovin' it!">
@@ -35,8 +72,12 @@ export default function ControlPanel() {
           <button className={[style.btn].join(" ")} title="Previous">
             ⧑
           </button>
-          <button className={[style.btn].join(" ")} title="Play">
-            ►
+          <button
+            className={[style.btn].join(" ")}
+            title="Play"
+            onClick={() => handlePlayback()}
+          >
+            {buffered ? "►" : "wait"}
           </button>
           <button className={[style.btn].join(" ")} title="Next">
             ⧑
@@ -45,6 +86,12 @@ export default function ControlPanel() {
             L
           </button>
         </div>
+        <audio
+          src={current && current.src}
+          ref={player}
+          onCanPlayThrough={() => setBuffered(true)}
+          onLoadStart={() => setBuffered(false)}
+        />
       </div>
     </div>
   );
