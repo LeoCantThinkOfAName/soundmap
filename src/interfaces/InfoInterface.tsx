@@ -3,7 +3,7 @@ export interface InfoTypes {
   name: string;
   date: string;
   author: string;
-  coords: Array<string>;
+  coords: number[];
   src: string;
   thumbnail: string;
 }

@@ -8,6 +8,7 @@ import Header from "./../header/Header";
 import ControlPanel from "./../controlPanel/ControlPanel";
 import Map from "./../map/Map";
 import Footer from "./../footer/Footer";
+import Setting from "./../setting/Setting";
 
 export default function Layout() {
   return (
@@ -15,6 +16,7 @@ export default function Layout() {
       <Header />
       <Map />
       <ControlPanel />
+      <Setting active={true} />
       <Footer />
     </main>
   );

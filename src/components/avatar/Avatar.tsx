@@ -26,7 +26,7 @@ export default memo(function Avatar() {
         <>
           <button
             className={style["avatar-wrapper"]}
-            title={`Hello, ${user && user.name}!`}
+            title="Personal Setting And Playlist"
             onClick={() => console.log("user setting!")}
           >
             <img src={user ? user.img : googleIcon} alt="profile" />

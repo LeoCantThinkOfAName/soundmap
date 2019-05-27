@@ -61,7 +61,7 @@ export default function ControlPanel() {
           </div>
           <div>
             <button className={style["like-btn"]} title="Lovin' it!">
-              ♥
+              ❤
             </button>
           </div>
         </div>
