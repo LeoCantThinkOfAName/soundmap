@@ -67,23 +67,23 @@ export default function ControlPanel() {
         </div>
         <div className={style["btns-wrapper"]}>
           <button className={[style.btn].join(" ")} title="Shuffle">
-            R
+            <i className="sm-shuffle" />
           </button>
           <button className={[style.btn].join(" ")} title="Previous">
-            ⧑
+            <i className="sm-backward" />
           </button>
           <button
             className={[style.btn].join(" ")}
             title="Play"
             onClick={() => handlePlayback()}
           >
-            {buffered ? "►" : "wait"}
+            <i className={buffered ? "sm-play" : "sm-spinner"} />
           </button>
           <button className={[style.btn].join(" ")} title="Next">
-            ⧑
+            <i className="sm-forward" />
           </button>
           <button className={[style.btn].join(" ")} title="Loop">
-            L
+            <i className="sm-loop" />
           </button>
         </div>
         <audio

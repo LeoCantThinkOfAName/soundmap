@@ -21,6 +21,11 @@ export default function Marker({ info, lat, lng }: propsTypes) {
   useEffect(() => {}, []);
 
   const handleClick = (info: InfoTypes) => {
+    window.history.pushState(
+      null,
+      null,
+      `/${info.name.replace(/\s+/g, "-")}/${info.id}`
+    );
     setCurrent(info);
   };
 

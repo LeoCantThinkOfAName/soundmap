@@ -1,4 +1,4 @@
-import React, { useContext, memo } from "react";
+import React, { useState, useContext, memo } from "react";
 
 // context
 import { UserContext } from "../../context/UserContext";
@@ -6,11 +6,15 @@ import { UserContext } from "../../context/UserContext";
 // assets
 import googleIcon from "../../images/google.svg";
 
+// components
+import Setting from "../setting/Setting";
+
 // styles
 import style from "./avatar.module.scss";
 
 export default memo(function Avatar() {
   const { user } = useContext(UserContext);
+  const [active, setActive] = useState(false);
 
   return (
     <>
@@ -27,10 +31,11 @@ export default memo(function Avatar() {
           <button
             className={style["avatar-wrapper"]}
             title="Personal Setting And Playlist"
-            onClick={() => console.log("user setting!")}
+            onClick={() => setActive(true)}
           >
             <img src={user ? user.img : googleIcon} alt="profile" />
           </button>
+          <Setting active={active} setActive={setActive} />
         </>
       )}
     </>

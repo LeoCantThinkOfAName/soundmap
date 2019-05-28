@@ -1,0 +1,72 @@
+@font-face {
+  font-family: "soundmap";
+  src: url("../fonts/soundmap.eot?mb5zf8");
+  src: url("../fonts/soundmap.eot?mb5zf8#iefix") format("embedded-opentype"),
+    url("../fonts/soundmap.ttf?mb5zf8") format("truetype"),
+    url("../fonts/soundmap.woff?mb5zf8") format("woff"),
+    url("../fonts/soundmap.svg?mb5zf8#soundmap") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="sm-"],
+[class*=" sm-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "soundmap" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.sm-qrcode:before {
+  content: "\e938";
+}
+.sm-compass:before {
+  content: "\e94a";
+}
+.sm-spinner:before {
+  content: "\e97a";
+}
+.sm-download:before {
+  content: "\e9c2";
+}
+.sm-contrast:before {
+  content: "\e9d5";
+}
+.sm-heart:before {
+  content: "\e9da";
+}
+.sm-enter:before {
+  content: "\ea13";
+}
+.sm-play:before {
+  content: "\ea1c";
+}
+.sm-pause:before {
+  content: "\ea1d";
+}
+.sm-backward:before {
+  content: "\ea1f";
+}
+.sm-forward:before {
+  content: "\ea20";
+}
+.sm-loop:before {
+  content: "\ea2d";
+}
+.sm-shuffle:before {
+  content: "\ea30";
+}
+.sm-share:before {
+  content: "\ea82";
+}
+.sm-github:before {
+  content: "\eab0";
+}

@@ -1,4 +1,7 @@
-import React, { useState, memo } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
+// context
+import { UserContext } from "./../../context/UserContext";
 
 // types
 import { InfoTypes } from "./../../interfaces/InfoInterface";
@@ -17,40 +20,71 @@ const renderList = (item: InfoTypes) => {
       </button>
       <p title={`${item.name}, ${item.date} by ${item.author}`}>{item.name}</p>
       <div>
-        <button title={`Go to ${item.name}`}>go</button>
-        <button title={`Play This Track.`}>pl</button>
+        <button
+          className={[style["list-btn"], style["navigate"]].join(" ")}
+          title={`Go to ${item.name}`}
+        >
+          go
+        </button>
+        <button
+          className={[style["list-btn"], style["play"]].join(" ")}
+          title={`Play This Track.`}
+        >
+          pl
+        </button>
       </div>
     </li>
   );
 };
 
-export default function Setting({ active }: { active: boolean }) {
-  const [open, setOpen] = useState(true);
+export default function Setting({
+  active,
+  setActive,
+}: {
+  active: boolean;
+  setActive: any;
+}) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {}, []);
+
+  const handleScroll = (e: any) => {
+    if (e.target.scrollTop > 0 && !scrolled) {
+      setScrolled(true);
+    } else if (e.target.scrollTop == 0) {
+      setScrolled(false);
+    }
+  };
 
   return (
-    open && (
+    active && (
       <div className={style["mask"]}>
         <div className={style["setting"]}>
-          <div className={style["list-wrapper"]}>
+          <div
+            className={
+              !scrolled
+                ? style["list-wrapper"]
+                : style["list-wrapper-double-edges"]
+            }
+          >
             <div className={style["header"]}>Your Favorite Tracks</div>
-            <ul className={style["list"]}>
+            <ul className={style["list"]} onScroll={e => handleScroll(e)}>
               {likes.map(item => renderList(item))}
             </ul>
           </div>
 
           <div className={style["setting-control"]}>
-            <div className={style["header"]}>Setting</div>
-            <button>Log out</button>
+            <button className={style["logout"]}>Log out</button>
             <div>
-              <button>TW</button>
-              <button>EN</button>
+              <button className={style["list-btn"]}>TW</button>
+              <button className={style["list-btn"]}>EN</button>
             </div>
           </div>
 
           <button
             className={style["close"]}
             title="close"
-            onClick={() => setOpen(false)}
+            onClick={() => setActive(false)}
           >
             ✕
           </button>
