@@ -9,13 +9,14 @@ import { MainContext } from "./../../context/MainContext";
 // style
 import style from "./marker.module.scss";
 
-interface propsTypes {
+interface propType {
   info: any;
+  id: string;
   lat: number;
   lng: number;
 }
 
-export default function Marker({ info, lat, lng }: propsTypes) {
+export default function Marker({ info, id }: propType) {
   const { current, setCurrent } = useContext(MainContext);
 
   useEffect(() => {}, []);
@@ -24,7 +25,7 @@ export default function Marker({ info, lat, lng }: propsTypes) {
     window.history.pushState(
       null,
       null,
-      `/${info.name.replace(/\s+/g, "-")}/${info.id}`
+      `/${info.name.replace(/\s+/g, "-")}/${id}`
     );
     setCurrent(info);
   };

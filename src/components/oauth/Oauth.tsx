@@ -16,6 +16,7 @@ declare global {
 
 export default function Oauth() {
   const [init, setInit] = useState(false);
+  const [tag, setTag] = useState(null);
   const { user, setUser } = useContext(UserContext);
 
   const initUser = (profile: any) => {
@@ -26,41 +27,49 @@ export default function Oauth() {
     });
   };
 
-  useEffect(() => {
-    createTag(() => {
-      const gapi = window.gapi;
-      let auth2: any;
+  const initAuth = () => {
+    const gapi = window.gapi;
+    let auth2: any;
 
-      gapi.load("auth2", () => {
-        auth2 = gapi.auth2.init({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-          scope: "profile",
-        });
-
-        auth2.isSignedIn.listen(() => {
-          if (auth2.isSignedIn.get() === true) {
-            initUser(auth2.currentUser.get().getBasicProfile());
-          }
-        });
-
-        const attachSignin = () => {
-          auth2.attachClickHandler(
-            document.getElementById("loginBtn"),
-            {},
-            (googleUser: any) => {
-              const profile = googleUser.getBasicProfile();
-              initUser(profile);
-            },
-            (error: any) => {
-              alert(JSON.stringify(error, undefined, 2));
-            }
-          );
-        };
-        attachSignin();
-        setInit(true);
+    gapi.load("auth2", () => {
+      auth2 = gapi.auth2.init({
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        scope: "profile",
       });
+
+      auth2.isSignedIn.listen(() => {
+        if (auth2.isSignedIn.get() === true) {
+          initUser(auth2.currentUser.get().getBasicProfile());
+        }
+      });
+
+      const attachSignin = () => {
+        auth2.attachClickHandler(
+          document.getElementById("loginBtn"),
+          {},
+          (googleUser: any) => {
+            const profile = googleUser.getBasicProfile();
+            initUser(profile);
+          },
+          (error: any) => {
+            alert(JSON.stringify(error, undefined, 2));
+          }
+        );
+      };
+      if (user === null) {
+        attachSignin();
+      }
+      setInit(true);
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    if (tag === null) {
+      createTag(initAuth);
+    } else {
+      initAuth();
+    }
+  }, [user]);
 
   return <Avatar />;
 }

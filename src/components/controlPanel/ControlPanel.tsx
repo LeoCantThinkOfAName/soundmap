@@ -61,7 +61,7 @@ export default function ControlPanel() {
           </div>
           <div>
             <button className={style["like-btn"]} title="Lovin' it!">
-              ❤
+              <i className="sm-heart" />
             </button>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function ControlPanel() {
             <i className="sm-backward" />
           </button>
           <button
-            className={[style.btn].join(" ")}
+            className={[style.btn, buffered ? null : style.spin].join(" ")}
             title="Play"
             onClick={() => handlePlayback()}
           >
@@ -87,7 +87,7 @@ export default function ControlPanel() {
           </button>
         </div>
         <audio
-          src={current && current.src}
+          src={current && current.audio.fields.file.url}
           ref={player}
           onCanPlayThrough={() => setBuffered(true)}
           onLoadStart={() => setBuffered(false)}

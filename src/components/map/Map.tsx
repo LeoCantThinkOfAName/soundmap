@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
+// type
+import { InfoTypes } from "./../../interfaces/InfoInterface";
+
+// context
+import { MainContext } from "./../../context/MainContext";
 
 // components
 import GoogleMapReact from "google-map-react";
-
-// data
-import mapData from "./data.json";
 
 // map styles
 import white from "./white.json";
 import Marker from "./../marker/Marker";
 
+// get contentful
+const contentful = require("contentful");
+
 export default function Map() {
+  const { tracks, setTracks } = useContext(MainContext);
   const [mapProps, setMapProps] = useState({
     center: {
       lat: 25.032862,
@@ -40,12 +47,13 @@ export default function Map() {
         yesIWantToUseGoogleMapApiInternals
         zoom={mapProps.zoom}
       >
-        {mapData.map(marker => (
+        {tracks.map((marker: any) => (
           <Marker
-            lat={marker.coords[0]}
-            lng={marker.coords[1]}
-            key={marker.id}
-            info={marker}
+            key={marker.sys.id}
+            info={marker.fields}
+            id={marker.sys.id}
+            lat={marker.fields.coord.lat}
+            lng={marker.fields.coord.lon}
           />
         ))}
       </GoogleMapReact>
