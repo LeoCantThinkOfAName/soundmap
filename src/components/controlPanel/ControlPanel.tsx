@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 
 // context
 import { MainContext } from "./../../context/MainContext";
+import { UserContext } from "./../../context/UserContext";
 
 // styles
 import style from "./control.module.scss";
+import LikeButton from "./../likeButton/LikeButton";
 
 declare global {
   interface Window {
@@ -15,11 +17,19 @@ declare global {
 
 export default function ControlPanel() {
   const { current } = useContext(MainContext);
+  const { user } = useContext(UserContext);
   const [buffered, setBuffered] = useState(true);
   const [audio, setAudio] = useState(null);
+  const [liked, setLiked] = useState(false);
   const player = useRef<any>(null);
 
   useEffect(() => {
+    if (user && current) {
+      const matched = user.favList.find(
+        (item: any) => item.sys.id === current.sys.id
+      );
+      setLiked(matched ? true : false);
+    }
     player.current.addEventListener("playing", () => {
       try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -29,7 +39,7 @@ export default function ControlPanel() {
         console.log(err);
       }
     });
-  }, []);
+  }, [user, current]);
 
   const handlePlayback = () => {
     if (buffered) {
@@ -50,19 +60,17 @@ export default function ControlPanel() {
         <div className={style["info"]}>
           <div>
             <h5 className={style["title"]}>
-              {current ? current.name : "Select a location to play."}
+              {current ? current.fields.name : "Select a location to play."}
             </h5>
             <p className={style["date"]}>
-              {current ? current.date : "00/00/0000 ( ) 00:00"}
+              {current ? current.fields.date : "00/00/0000 ( ) 00:00"}
             </p>
             <p className={style["date"]}>
-              {current ? current.author : "Noname"}
+              {current ? current.fields.author : "Noname"}
             </p>
           </div>
           <div>
-            <button className={style["like-btn"]} title="Lovin' it!">
-              <i className="sm-heart" />
-            </button>
+            <LikeButton item={current ? current : null} liked={liked} />
           </div>
         </div>
         <div className={style["btns-wrapper"]}>
@@ -87,7 +95,7 @@ export default function ControlPanel() {
           </button>
         </div>
         <audio
-          src={current && current.audio.fields.file.url}
+          src={current && current.fields.audio.fields.file.url}
           ref={player}
           onCanPlayThrough={() => setBuffered(true)}
           onLoadStart={() => setBuffered(false)}

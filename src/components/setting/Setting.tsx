@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { memo, useState, useEffect, useContext } from "react";
 
 // context
 import { UserContext } from "./../../context/UserContext";
@@ -9,7 +9,7 @@ import ListItem from "./ListItem";
 // styles
 import style from "./setting.module.scss";
 
-export default function Setting({
+export default memo(function Setting({
   active,
   setActive,
 }: {
@@ -17,9 +17,10 @@ export default function Setting({
   setActive: any;
 }) {
   const [scrolled, setScrolled] = useState(false);
-  const { favorite, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  console.log(user.favList);
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [user]);
 
   const signOut = () => {
     const auth2 = window.gapi.auth2.getAuthInstance();
@@ -49,7 +50,8 @@ export default function Setting({
           <div className={style["header"]}>Your Favorite Tracks</div>
           {active && (
             <ul className={style["list"]} onScroll={e => handleScroll(e)}>
-              {favorite.map((item: any) => ListItem(item))}
+              {user.favList.length > 0 &&
+                user.favList.map((item: any) => ListItem(item, user, setUser))}
             </ul>
           )}
         </div>
@@ -74,4 +76,4 @@ export default function Setting({
       </div>
     </div>
   );
-}
+});

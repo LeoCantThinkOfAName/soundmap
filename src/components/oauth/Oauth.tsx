@@ -5,6 +5,7 @@ import { UserContext } from "./../../context/UserContext";
 
 // function
 import createTag from "./createTag";
+import fetchContentful from "./fetchContentFul";
 import Avatar from "./../avatar/Avatar";
 
 // interface
@@ -15,19 +16,23 @@ declare global {
 }
 
 export default function Oauth() {
-  const [init, setInit] = useState(false);
   const [tag, setTag] = useState(null);
   const { user, setUser } = useContext(UserContext);
 
   const initUser = (profile: any) => {
-    setUser({
-      name: profile.getName(),
-      id: profile.getId(),
-      img: profile.getImageUrl(),
+    fetchContentful(profile.getId(), (userData: any) => {
+      setUser({
+        name: profile.getName(),
+        id: profile.getId(),
+        img: profile.getImageUrl(),
+        contentfulId: userData.contentfulId,
+        favList: userData.favList,
+      });
     });
   };
 
   const initAuth = () => {
+    setTag(true);
     const gapi = window.gapi;
     let auth2: any;
 
@@ -59,7 +64,6 @@ export default function Oauth() {
       if (user === null) {
         attachSignin();
       }
-      setInit(true);
     });
   };
 

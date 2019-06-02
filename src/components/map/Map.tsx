@@ -50,7 +50,7 @@ export default function Map() {
         {tracks.map((marker: any) => (
           <Marker
             key={marker.sys.id}
-            info={marker.fields}
+            item={marker}
             id={marker.sys.id}
             lat={marker.fields.coord.lat}
             lng={marker.fields.coord.lon}

@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
+
+// components
+import LikeButton from "./../likeButton/LikeButton";
 
 // style
 import style from "./setting.module.scss";
 
-export default function ListItem(item: any) {
+export default function ListItem(item: any, user: any, setUser: any) {
+  console.log(item);
   return (
     <li key={item.sys.id} className={style["item"]}>
-      <button
-        className={style["like-btn"]}
-        title={`Unlike ${item.fields.name}`}
-      >
-        <i className="sm-heart" />
-      </button>
+      <LikeButton item={item} liked={true} />
       <p
         title={`${item.fields.name}, ${item.fields.date} by ${
           item.fields.author

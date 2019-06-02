@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { memo, useContext, useEffect } from "react";
 
 // types
 import { InfoTypes } from "./../../interfaces/InfoInterface";
@@ -10,36 +10,33 @@ import { MainContext } from "./../../context/MainContext";
 import style from "./marker.module.scss";
 
 interface propType {
-  info: any;
+  item: any;
   id: string;
   lat: number;
   lng: number;
 }
 
-export default function Marker({ info, id }: propType) {
+export default memo(function Marker({ item, id }: propType) {
   const { current, setCurrent } = useContext(MainContext);
-
-  useEffect(() => {}, []);
-
   const handleClick = (info: InfoTypes) => {
     window.history.pushState(
       null,
       null,
-      `/${info.name.replace(/\s+/g, "-")}/${id}`
+      `/${item.fields.name.replace(/\s+/g, "-")}/${id}`
     );
-    setCurrent(info);
+    setCurrent(item);
   };
 
   return (
     <div
-      onClick={() => handleClick(info)}
+      onClick={() => handleClick(item)}
       className={`${style.marker} ${
-        current && current.id === info.id ? style.active : null
+        current && current.sys.id === id ? style.active : null
       }`}
     >
       <span className={style.label}>
-        <span>{info.name}</span>
+        <span>{item.fields.name}</span>
       </span>
     </div>
   );
-}
+});

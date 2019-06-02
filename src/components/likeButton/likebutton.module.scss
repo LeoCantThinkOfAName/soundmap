@@ -1,0 +1,26 @@
+@import "../../styles/variable.scss";
+
+.like-btn,
+.like-btn-unliked {
+  background: none;
+  border: 0;
+  color: $theme;
+  cursor: pointer;
+  font-size: 1rem;
+  height: 100%;
+  transition: 0.3s ease-in-out;
+  width: 50px;
+
+  &:hover {
+    color: rgba($black, 0.25);
+    transform: scale(1.2);
+  }
+}
+
+.like-btn-unliked {
+  color: rgba($black, 0.25);
+
+  &:hover {
+    color: $theme;
+  }
+}

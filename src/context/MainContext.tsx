@@ -12,8 +12,8 @@ export default function MainProvider({ children }: any) {
   useEffect(() => {
     const contentful = require("contentful");
     const client = contentful.createClient({
-      space: "3agv0fuye263",
-      accessToken: "JoOiDz4xFPFXPDuhqr9WH20slpNro9adrTnaF74cjzo",
+      space: process.env.REACT_APP_CONTENTFUL_SPACE,
+      accessToken: process.env.REACT_APP_CONTENTFUL_API,
     });
     client
       .getEntries({ content_type: "track" })
