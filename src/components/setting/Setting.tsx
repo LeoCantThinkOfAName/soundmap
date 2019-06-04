@@ -18,7 +18,6 @@ export default memo(function Setting({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  console.log(user.favList);
 
   useEffect(() => {}, [user]);
 

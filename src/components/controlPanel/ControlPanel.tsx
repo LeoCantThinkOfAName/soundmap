@@ -4,6 +4,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { MainContext } from "./../../context/MainContext";
 import { UserContext } from "./../../context/UserContext";
 
+// components
+import PlayBtn from "./PlayBtn";
+
 // styles
 import style from "./control.module.scss";
 import LikeButton from "./../likeButton/LikeButton";
@@ -16,10 +19,11 @@ declare global {
 }
 
 export default function ControlPanel() {
-  const { current } = useContext(MainContext);
+  const { current, setCurrent, tracks } = useContext(MainContext);
   const { user } = useContext(UserContext);
   const [buffered, setBuffered] = useState(true);
   const [audio, setAudio] = useState(null);
+  const [play, setPlay] = useState(false);
   const [liked, setLiked] = useState(false);
   const player = useRef<any>(null);
 
@@ -34,7 +38,6 @@ export default function ControlPanel() {
       try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         setAudio(new AudioContext());
-        console.log(audio);
       } catch (err) {
         console.log(err);
       }
@@ -42,8 +45,40 @@ export default function ControlPanel() {
   }, [user, current]);
 
   const handlePlayback = () => {
-    if (buffered) {
-      player.current.paused ? player.current.play() : player.current.pause();
+    if (buffered && player.current.src) {
+      if (player.current.paused) {
+        player.current.play();
+        setPlay(true);
+      } else {
+        setPlay(false);
+        player.current.pause();
+      }
+    }
+  };
+
+  const handleSkip = (direction: boolean) => {
+    if (!current) return;
+    // pause player first
+    player.current.pause();
+    setPlay(false);
+
+    const index = tracks.findIndex(
+      (item: any) => item.sys.id === current.sys.id
+    );
+
+    // skip...
+    if (direction) {
+      if (index + 1 >= tracks.length) {
+        setCurrent(tracks[0]);
+      } else {
+        setCurrent(tracks[index + 1]);
+      }
+    } else {
+      if (index - 1 < 0) {
+        setCurrent(tracks[tracks.length - 1]);
+      } else {
+        setCurrent(tracks[index - 1]);
+      }
     }
   };
 
@@ -77,7 +112,11 @@ export default function ControlPanel() {
           <button className={[style.btn].join(" ")} title="Shuffle">
             <i className="sm-shuffle" />
           </button>
-          <button className={[style.btn].join(" ")} title="Previous">
+          <button
+            className={[style.btn].join(" ")}
+            title="Previous"
+            onClick={() => handleSkip(false)}
+          >
             <i className="sm-backward" />
           </button>
           <button
@@ -85,9 +124,13 @@ export default function ControlPanel() {
             title="Play"
             onClick={() => handlePlayback()}
           >
-            <i className={buffered ? "sm-play" : "sm-spinner"} />
+            <PlayBtn playStatus={play} bufferStatus={buffered} />
           </button>
-          <button className={[style.btn].join(" ")} title="Next">
+          <button
+            className={[style.btn].join(" ")}
+            title="Next"
+            onClick={() => handleSkip(true)}
+          >
             <i className="sm-forward" />
           </button>
           <button className={[style.btn].join(" ")} title="Loop">

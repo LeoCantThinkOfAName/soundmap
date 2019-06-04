@@ -17,7 +17,7 @@ import Marker from "./../marker/Marker";
 const contentful = require("contentful");
 
 export default function Map() {
-  const { tracks, setTracks } = useContext(MainContext);
+  const { tracks, current } = useContext(MainContext);
   const [mapProps, setMapProps] = useState({
     center: {
       lat: 25.032862,
@@ -46,6 +46,11 @@ export default function Map() {
         }}
         yesIWantToUseGoogleMapApiInternals
         zoom={mapProps.zoom}
+        center={
+          current
+            ? { lat: current.fields.coord.lat, lng: current.fields.coord.lon }
+            : mapProps.center
+        }
       >
         {tracks.map((marker: any) => (
           <Marker

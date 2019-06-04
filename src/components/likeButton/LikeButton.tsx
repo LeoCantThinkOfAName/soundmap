@@ -3,6 +3,9 @@ import React, { memo, useContext } from "react";
 // contenxt
 import { UserContext } from "./../../context/UserContext";
 
+// fucntion
+import fetchContentFul from "../oauth/fetchContentFul";
+
 // style
 import style from "./likebutton.module.scss";
 
@@ -25,18 +28,22 @@ export default memo(function LikeButton({
       .getSpace(process.env.REACT_APP_CONTENTFUL_SPACE)
       .then((space: any) => space.getEntry(user.contentfulId))
       .then((entry: any) => {
-        let newFavList;
         if (liked) {
-          console.log(user.favList);
-          newFavList = entry.fields.favorite["zh-Hant-TW"].filter(
-            (track: any) => track.sys.id !== item.sys.id
-          );
-          console.log(newFavList);
-          entry.fields.favorite["zh-Hant-TW"] = newFavList;
+          entry.fields.favorite["zh-Hant-TW"] = entry.fields.favorite[
+            "zh-Hant-TW"
+          ].filter((track: any) => track.sys.id != item.sys.id);
         } else {
           if (entry.fields.favorite) {
-            newFavList = entry.fields.favorite["zh-Hant-TW"].push(item);
-            entry.fields.favorite["zh-Hant-TW"] = newFavList;
+            entry.fields.favorite["zh-Hant-TW"] = [
+              ...entry.fields.favorite["zh-Hant-TW"],
+              {
+                sys: {
+                  type: "Link",
+                  linkType: "Entry",
+                  id: item.sys.id,
+                },
+              },
+            ];
           } else {
             entry.fields.favorite = {
               "zh-Hant-TW": [
@@ -44,18 +51,24 @@ export default memo(function LikeButton({
                   sys: {
                     type: "Link",
                     linkType: "Entry",
-                    id: item.id,
+                    id: item.sys.id,
                   },
                 },
               ],
             };
-            newFavList = [];
           }
         }
-        setUser({ ...user, favList: newFavList });
         return entry.update();
       })
-      .then((entry: any) => entry.publish())
+      .then(async (entry: any) => {
+        await entry.publish();
+        await fetchContentFul(user.id, (userData: any) => {
+          setUser({
+            ...user,
+            favList: userData.favList,
+          });
+        });
+      })
       .catch(console.error);
   };
 
