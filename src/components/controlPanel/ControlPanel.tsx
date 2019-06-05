@@ -22,7 +22,6 @@ export default function ControlPanel() {
   const { current, setCurrent, tracks } = useContext(MainContext);
   const { user } = useContext(UserContext);
   const [buffered, setBuffered] = useState(true);
-  const [audio, setAudio] = useState(null);
   const [play, setPlay] = useState(false);
   const [liked, setLiked] = useState(false);
   const player = useRef<any>(null);
@@ -37,7 +36,7 @@ export default function ControlPanel() {
     player.current.addEventListener("playing", () => {
       try {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        setAudio(new AudioContext());
+        setPlay(true);
       } catch (err) {
         console.log(err);
       }
@@ -60,14 +59,16 @@ export default function ControlPanel() {
   };
 
   const handleSkip = (direction: boolean) => {
-    if (!current) return;
+    let index;
     // pause player first
     player.current.pause();
     setPlay(false);
 
-    const index = tracks.findIndex(
-      (item: any) => item.sys.id === current.sys.id
-    );
+    if (current) {
+      index = tracks.findIndex((item: any) => item.sys.id === current.sys.id);
+    } else {
+      index = 0;
+    }
 
     // skip...
     if (direction) {

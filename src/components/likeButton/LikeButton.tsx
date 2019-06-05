@@ -4,9 +4,6 @@ import React, { memo, useContext } from "react";
 import { UserContext } from "./../../context/UserContext";
 import { MainContext } from "./../../context/MainContext";
 
-// fucntion
-import fetchContentFul from "../oauth/fetchContentFul";
-
 // style
 import style from "./likebutton.module.scss";
 
@@ -34,7 +31,9 @@ export default memo(function LikeButton({
           ? entry.fields.favorite["zh-Hant-TW"]
           : [];
         if (liked) {
-          newFavs = newFavs.filter((track: any) => track.sys.id != item.sys.id);
+          newFavs = newFavs.filter(
+            (track: any) => track.sys.id !== item.sys.id
+          );
         } else {
           if (entry.fields.favorite) {
             newFavs = [
@@ -64,7 +63,6 @@ export default memo(function LikeButton({
         return entry.update();
       })
       .then((entry: any) => {
-        entry.publish();
         if (entry.fields.favorite) {
           const newFavs = entry.fields.favorite["zh-Hant-TW"];
           setUser({
@@ -76,6 +74,7 @@ export default memo(function LikeButton({
         } else {
           setUser({ ...user, favList: [] });
         }
+        entry.publish();
       })
       .catch(console.error);
   };

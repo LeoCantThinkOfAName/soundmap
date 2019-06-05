@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect } from "react";
+import React, { memo, useContext } from "react";
 
 // types
 import { InfoTypes } from "./../../interfaces/InfoInterface";

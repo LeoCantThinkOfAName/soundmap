@@ -1,30 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-
-// type
-import { InfoTypes } from "./../../interfaces/InfoInterface";
+import React, { useEffect, useContext } from "react";
 
 // context
 import { MainContext } from "./../../context/MainContext";
+import { MapContext } from "../../context/MapContext";
 
 // components
 import GoogleMapReact from "google-map-react";
+import Marker from "./../marker/Marker";
 
 // map styles
 import white from "./white.json";
-import Marker from "./../marker/Marker";
-
-// get contentful
-const contentful = require("contentful");
 
 export default function Map() {
   const { tracks, current } = useContext(MainContext);
-  const [mapProps, setMapProps] = useState({
-    center: {
-      lat: 25.032862,
-      lng: 121.56812001,
-    },
-    zoom: 12,
-  });
+  const { mapProps, setMapProps } = useContext(MapContext);
 
   useEffect(() => {
     // setTimeout(() => {

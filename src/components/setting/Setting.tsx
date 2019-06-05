@@ -2,6 +2,8 @@ import React, { memo, useState, useEffect, useContext } from "react";
 
 // context
 import { UserContext } from "./../../context/UserContext";
+import { MapContext } from "./../../context/MapContext";
+import { MainContext } from "./../../context/MainContext";
 
 // components
 import ListItem from "./ListItem";
@@ -18,6 +20,8 @@ export default memo(function Setting({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { mapProps, setMapProps } = useContext(MapContext);
+  const { setCurrent } = useContext(MainContext);
 
   useEffect(() => {}, [user]);
 
@@ -50,7 +54,9 @@ export default memo(function Setting({
           {active && (
             <ul className={style["list"]} onScroll={e => handleScroll(e)}>
               {user.favList.length > 0 &&
-                user.favList.map((item: any) => ListItem(item, user, setUser))}
+                user.favList.map((item: any) =>
+                  ListItem(item, setMapProps, mapProps, setCurrent)
+                )}
             </ul>
           )}
         </div>
