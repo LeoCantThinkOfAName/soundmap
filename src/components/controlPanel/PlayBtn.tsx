@@ -1,6 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 
-export default function PlayBtn({
+export default memo(function PlayBtn({
   playStatus,
   bufferStatus,
 }: {
@@ -14,4 +14,4 @@ export default function PlayBtn({
   } else {
     return <i className="sm-spin" />;
   }
-}
+});

@@ -13,12 +13,12 @@ import white from "./white.json";
 
 export default function Map() {
   const { tracks, current } = useContext(MainContext);
-  const { mapProps, setMapProps } = useContext(MapContext);
+  const { mapProps, setMapProps, center } = useContext(MapContext);
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setMapProps({ ...mapProps, zoom: 15 });
-    // }, 2000);
+    setTimeout(() => {
+      setMapProps({ ...mapProps, zoom: 15 });
+    }, 2000);
   }, []);
 
   return (
@@ -35,11 +35,7 @@ export default function Map() {
         }}
         yesIWantToUseGoogleMapApiInternals
         zoom={mapProps.zoom}
-        center={
-          current
-            ? { lat: current.fields.coord.lat, lng: current.fields.coord.lon }
-            : mapProps.center
-        }
+        center={center ? { lat: center.lat, lng: center.lng } : mapProps.center}
       >
         {tracks.map((marker: any) => (
           <Marker

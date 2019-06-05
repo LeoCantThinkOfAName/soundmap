@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 // context
 import { MainContext } from "./../../context/MainContext";
 import { UserContext } from "./../../context/UserContext";
+import { MapContext } from "./../../context/MapContext";
 
 // components
 import PlayBtn from "./PlayBtn";
@@ -19,32 +20,33 @@ declare global {
 }
 
 export default function ControlPanel() {
-  const { current, setCurrent, tracks } = useContext(MainContext);
+  const { current, setCurrent, tracks, play, setPlay } = useContext(
+    MainContext
+  );
   const { user } = useContext(UserContext);
+  const { setCenter } = useContext(MapContext);
   const [buffered, setBuffered] = useState(true);
-  const [play, setPlay] = useState(false);
   const [liked, setLiked] = useState(false);
   const player = useRef<any>(null);
+  const title = useRef<any>(null);
 
   useEffect(() => {
+    console.log(play);
     if (user && current) {
       const matched = user.favList.find(
         (item: any) => item.sys.id === current.sys.id
       );
       setLiked(matched ? true : false);
     }
-    player.current.addEventListener("playing", () => {
-      try {
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        setPlay(true);
-      } catch (err) {
-        console.log(err);
-      }
-    });
+
+    if (play) {
+      player.current.play();
+    }
+
     player.current.addEventListener("loadstart", () => {
       setPlay(false);
     });
-  }, [user, current]);
+  }, [user, current, play]);
 
   const handlePlayback = () => {
     if (buffered && player.current.src) {
@@ -66,23 +68,31 @@ export default function ControlPanel() {
 
     if (current) {
       index = tracks.findIndex((item: any) => item.sys.id === current.sys.id);
-    } else {
-      index = 0;
-    }
-
-    // skip...
-    if (direction) {
-      if (index + 1 >= tracks.length) {
-        setCurrent(tracks[0]);
+      // skip...
+      if (direction) {
+        if (index + 1 >= tracks.length) {
+          index = 0;
+        } else {
+          index++;
+        }
       } else {
-        setCurrent(tracks[index + 1]);
+        if (index - 1 < 0) {
+          index = tracks.length - 1;
+        } else {
+          index--;
+        }
       }
+      setCurrent(tracks[index]);
+      setCenter({
+        lat: tracks[index].fields.coord.lat,
+        lng: tracks[index].fields.coord.lon,
+      });
     } else {
-      if (index - 1 < 0) {
-        setCurrent(tracks[tracks.length - 1]);
-      } else {
-        setCurrent(tracks[index - 1]);
-      }
+      setCurrent(tracks[0]);
+      setCenter({
+        lat: tracks[0].fields.coord.lat,
+        lng: tracks[0].fields.coord.lon,
+      });
     }
   };
 
@@ -98,7 +108,7 @@ export default function ControlPanel() {
       <div className={style["main-panel"]}>
         <div className={style["info"]}>
           <div>
-            <h5 className={style["title"]}>
+            <h5 className={style["title"]} ref={title}>
               {current ? current.fields.name : "Select a location to play."}
             </h5>
             <p className={style["date"]}>

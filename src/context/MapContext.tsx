@@ -10,9 +10,13 @@ export default function MapProvider({ children }: any) {
     },
     zoom: 12,
   });
+  const [center, setCenter] = useState({
+    lat: 25.032862,
+    lng: 121.56812001,
+  });
 
   return (
-    <MapContext.Provider value={{ mapProps, setMapProps }}>
+    <MapContext.Provider value={{ mapProps, setMapProps, center, setCenter }}>
       {children}
     </MapContext.Provider>
   );

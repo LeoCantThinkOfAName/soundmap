@@ -8,6 +8,9 @@ export const MainContext = createContext<any>(null);
 export default function MainProvider({ children }: any) {
   const [current, setCurrent] = useState<InfoTypes | undefined>(undefined);
   const [tracks, setTracks] = useState([]);
+  const [play, setPlay] = useState(false);
+  const [loop, setLoop] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
 
   useEffect(() => {
     const contentful = require("contentful");
@@ -22,7 +25,20 @@ export default function MainProvider({ children }: any) {
   }, []);
 
   return (
-    <MainContext.Provider value={{ current, setCurrent, tracks, setTracks }}>
+    <MainContext.Provider
+      value={{
+        current,
+        setCurrent,
+        tracks,
+        setTracks,
+        play,
+        setPlay,
+        loop,
+        setLoop,
+        shuffle,
+        setShuffle,
+      }}
+    >
       {children}
     </MainContext.Provider>
   );

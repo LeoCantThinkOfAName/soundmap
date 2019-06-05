@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 // components
 import LikeButton from "./../likeButton/LikeButton";
@@ -8,27 +8,24 @@ import style from "./setting.module.scss";
 
 export default function ListItem(
   item: any,
-  setMapProps: any,
-  mapProps: any,
-  setCurrent: any
+  setCurrent: any,
+  setPlay: any,
+  setCenter: any
 ) {
-  const handleNav = (target: any) => {
-    setMapProps({
-      ...mapProps,
-      center: {
-        lat: item.fields.coord.lat,
-        lng: item.fields.coord.lon,
-      },
+  const handleNav = () => {
+    setCenter({
+      lat: item.fields.coord.lat,
+      lng: item.fields.coord.lon,
     });
   };
 
-  const handlePlay = (target: any) => {
-    const audio = document.querySelector("audio");
-    audio.src = item.fields.audio;
-    setCurrent(target);
-    audio.addEventListener("canplaythrough", () => {
-      audio.play();
+  const handlePlay = () => {
+    setCurrent(item);
+    setCenter({
+      lat: item.fields.coord.lat,
+      lng: item.fields.coord.lon,
     });
+    setPlay(true);
   };
 
   return (
@@ -45,14 +42,14 @@ export default function ListItem(
         <button
           className={[style["list-btn"], style["navigate"]].join(" ")}
           title={`Go to ${item.fields.name}`}
-          onClick={() => handleNav(item)}
+          onClick={() => handleNav()}
         >
           <i className="sm-compass" />
         </button>
         <button
           className={[style["list-btn"], style["play"]].join(" ")}
           title={`Play This Track.`}
-          onClick={() => handlePlay(item)}
+          onClick={() => handlePlay()}
         >
           <i className="sm-play" />
         </button>

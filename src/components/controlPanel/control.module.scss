@@ -57,16 +57,23 @@
   color: inherit;
   display: flex;
   justify-content: space-between;
+
+  & > div {
+    &:nth-of-type(1) {
+      overflow: hidden;
+      max-width: 280px;
+      width: calc(100vw - 8rem - 45px);
+    }
+  }
 }
 
 .title {
   display: block;
   font-size: 1.2rem;
-  overflow: hidden;
   margin: 0;
   white-space: nowrap;
-  width: calc(100vw - 8rem - 45px);
-  max-width: 280px;
+  word-break: keep-all;
+  width: max-content;
 }
 
 .date {

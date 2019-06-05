@@ -20,8 +20,8 @@ export default memo(function Setting({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const { user, setUser } = useContext(UserContext);
-  const { mapProps, setMapProps } = useContext(MapContext);
-  const { setCurrent } = useContext(MainContext);
+  const { setCenter } = useContext(MapContext);
+  const { setCurrent, setPlay } = useContext(MainContext);
 
   useEffect(() => {}, [user]);
 
@@ -55,7 +55,7 @@ export default memo(function Setting({
             <ul className={style["list"]} onScroll={e => handleScroll(e)}>
               {user.favList.length > 0 &&
                 user.favList.map((item: any) =>
-                  ListItem(item, setMapProps, mapProps, setCurrent)
+                  ListItem(item, setCurrent, setPlay, setCenter)
                 )}
             </ul>
           )}

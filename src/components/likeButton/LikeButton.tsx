@@ -60,9 +60,6 @@ export default memo(function LikeButton({
           }
         }
         entry.fields.favorite["zh-Hant-TW"] = newFavs;
-        return entry.update();
-      })
-      .then((entry: any) => {
         if (entry.fields.favorite) {
           const newFavs = entry.fields.favorite["zh-Hant-TW"];
           setUser({
@@ -74,6 +71,9 @@ export default memo(function LikeButton({
         } else {
           setUser({ ...user, favList: [] });
         }
+        return entry.update();
+      })
+      .then((entry: any) => {
         entry.publish();
       })
       .catch(console.error);
