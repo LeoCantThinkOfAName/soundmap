@@ -27,9 +27,9 @@ export default function Map() {
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      setMapProps({ ...mapProps, zoom: 15 });
-    }, 2000);
+    // setTimeout(() => {
+    //   setMapProps({ ...mapProps, zoom: 15 });
+    // }, 2000);
   }, []);
 
   return (

@@ -42,6 +42,9 @@ export default function ControlPanel() {
         console.log(err);
       }
     });
+    player.current.addEventListener("loadstart", () => {
+      setPlay(false);
+    });
   }, [user, current]);
 
   const handlePlayback = () => {

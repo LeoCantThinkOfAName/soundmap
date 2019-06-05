@@ -2,6 +2,7 @@ import React, { memo, useContext } from "react";
 
 // contenxt
 import { UserContext } from "./../../context/UserContext";
+import { MainContext } from "./../../context/MainContext";
 
 // fucntion
 import fetchContentFul from "../oauth/fetchContentFul";
@@ -17,6 +18,7 @@ export default memo(function LikeButton({
   liked: boolean;
 }) {
   const { user, setUser } = useContext(UserContext);
+  const { tracks } = useContext(MainContext);
 
   const handleClick = () => {
     const contentful = require("contentful-management");
@@ -28,14 +30,15 @@ export default memo(function LikeButton({
       .getSpace(process.env.REACT_APP_CONTENTFUL_SPACE)
       .then((space: any) => space.getEntry(user.contentfulId))
       .then((entry: any) => {
+        let newFavs = entry.fields.favorite
+          ? entry.fields.favorite["zh-Hant-TW"]
+          : [];
         if (liked) {
-          entry.fields.favorite["zh-Hant-TW"] = entry.fields.favorite[
-            "zh-Hant-TW"
-          ].filter((track: any) => track.sys.id != item.sys.id);
+          newFavs = newFavs.filter((track: any) => track.sys.id != item.sys.id);
         } else {
           if (entry.fields.favorite) {
-            entry.fields.favorite["zh-Hant-TW"] = [
-              ...entry.fields.favorite["zh-Hant-TW"],
+            newFavs = [
+              ...newFavs,
               {
                 sys: {
                   type: "Link",
@@ -46,28 +49,33 @@ export default memo(function LikeButton({
             ];
           } else {
             entry.fields.favorite = {
-              "zh-Hant-TW": [
-                {
-                  sys: {
-                    type: "Link",
-                    linkType: "Entry",
-                    id: item.sys.id,
-                  },
-                },
-              ],
+              "zh-Hant-TW": [],
             };
+            newFavs.push({
+              sys: {
+                type: "Link",
+                linkType: "Entry",
+                id: item.sys.id,
+              },
+            });
           }
         }
+        entry.fields.favorite["zh-Hant-TW"] = newFavs;
         return entry.update();
       })
-      .then(async (entry: any) => {
-        await entry.publish();
-        await fetchContentFul(user.id, (userData: any) => {
+      .then((entry: any) => {
+        entry.publish();
+        if (entry.fields.favorite) {
+          const newFavs = entry.fields.favorite["zh-Hant-TW"];
           setUser({
             ...user,
-            favList: userData.favList,
+            favList: tracks.filter((track: any) =>
+              newFavs.find((newTrack: any) => newTrack.sys.id === track.sys.id)
+            ),
           });
-        });
+        } else {
+          setUser({ ...user, favList: [] });
+        }
       })
       .catch(console.error);
   };
