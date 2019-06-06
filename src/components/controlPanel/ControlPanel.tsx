@@ -11,6 +11,7 @@ import PlayBtn from "./PlayBtn";
 // styles
 import style from "./control.module.scss";
 import LikeButton from "./../likeButton/LikeButton";
+import InfoBar from "./InfoBar";
 
 declare global {
   interface Window {
@@ -28,10 +29,8 @@ export default function ControlPanel() {
   const [buffered, setBuffered] = useState(true);
   const [liked, setLiked] = useState(false);
   const player = useRef<any>(null);
-  const title = useRef<any>(null);
 
   useEffect(() => {
-    console.log(play);
     if (user && current) {
       const matched = user.favList.find(
         (item: any) => item.sys.id === current.sys.id
@@ -42,10 +41,6 @@ export default function ControlPanel() {
     if (play) {
       player.current.play();
     }
-
-    player.current.addEventListener("loadstart", () => {
-      setPlay(false);
-    });
   }, [user, current, play]);
 
   const handlePlayback = () => {
@@ -107,17 +102,7 @@ export default function ControlPanel() {
       </div>
       <div className={style["main-panel"]}>
         <div className={style["info"]}>
-          <div>
-            <h5 className={style["title"]} ref={title}>
-              {current ? current.fields.name : "Select a location to play."}
-            </h5>
-            <p className={style["date"]}>
-              {current ? current.fields.date : "00/00/0000 ( ) 00:00"}
-            </p>
-            <p className={style["date"]}>
-              {current ? current.fields.author : "Noname"}
-            </p>
-          </div>
+          <InfoBar current={current} />
           <div>
             <LikeButton item={current ? current : null} liked={liked} />
           </div>

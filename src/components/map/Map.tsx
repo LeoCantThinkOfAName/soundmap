@@ -12,7 +12,7 @@ import Marker from "./../marker/Marker";
 import white from "./white.json";
 
 export default function Map() {
-  const { tracks, current } = useContext(MainContext);
+  const { tracks } = useContext(MainContext);
   const { mapProps, setMapProps, center } = useContext(MapContext);
 
   useEffect(() => {

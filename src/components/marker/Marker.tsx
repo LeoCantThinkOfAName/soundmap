@@ -18,7 +18,7 @@ interface propType {
 }
 
 export default memo(function Marker({ item, id }: propType) {
-  const { current, setCurrent } = useContext(MainContext);
+  const { current, setCurrent, setPlay } = useContext(MainContext);
   const { setCenter } = useContext(MapContext);
 
   const handleClick = () => {
@@ -32,6 +32,7 @@ export default memo(function Marker({ item, id }: propType) {
       lat: item.fields.coord.lat,
       lng: item.fields.coord.lon,
     });
+    setPlay(false);
   };
 
   return (
