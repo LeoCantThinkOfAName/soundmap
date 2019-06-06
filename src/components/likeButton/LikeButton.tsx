@@ -82,7 +82,7 @@ export default memo(function LikeButton({
   return (
     <button
       className={liked ? style["like-btn"] : style["like-btn-unliked"]}
-      title={`${liked ? "Unlike" : "Like"} ${item ? item.name : ""}`}
+      title={`${liked ? "Unlike" : "Like"} ${item ? item.fields.name : ""}`}
       onClick={() => handleClick()}
     >
       <i className="sm-heart" />

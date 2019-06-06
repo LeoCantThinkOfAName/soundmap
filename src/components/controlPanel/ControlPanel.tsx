@@ -31,6 +31,7 @@ export default function ControlPanel() {
   const player = useRef<any>(null);
 
   useEffect(() => {
+    console.log(current);
     if (user && current) {
       const matched = user.favList.find(
         (item: any) => item.sys.id === current.sys.id
@@ -95,8 +96,8 @@ export default function ControlPanel() {
     <div className={style["control-panel"]}>
       <div className={style["thumbnail-wrapper"]}>
         <img
-          src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2017/12/Stargroves-album-cover.png?auto=format&q=60&fit=max&w=930"
-          alt="thumbnail"
+          src={current ? current.fields.thumbnail.fields.file.url : null}
+          alt={current ? current.fields.thumbnail.fields.fdescription : null}
           className={style["thumbnail"]}
         />
       </div>
