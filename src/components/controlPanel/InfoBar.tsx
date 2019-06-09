@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState, memo } from "react";
+import { useTranslation } from "react-i18next";
+
 import moment from "moment";
 
 import style from "./control.module.scss";
 
 export default memo(function InfoBar({ current }: { current: any }) {
+  const { t } = useTranslation(null, { useSuspense: false });
   const titleBar = useRef<any>(null);
   const inter = useRef<any>(null);
 
@@ -48,7 +51,7 @@ export default memo(function InfoBar({ current }: { current: any }) {
         ref={titleBar}
         onMouseOver={() => transition()}
       >
-        {current ? current.fields.name : "Select a location to play."}
+        {current ? current.fields.name : t("select-a-location-to-play")}
       </h5>
       <p className={style["date"]}>
         {current
@@ -56,7 +59,7 @@ export default memo(function InfoBar({ current }: { current: any }) {
           : "00/00/0000 ( ) 00:00"}
       </p>
       <p className={style["date"]}>
-        {current ? current.fields.author : "Noname"}
+        {current ? current.fields.author : t("noname")}
       </p>
     </div>
   );

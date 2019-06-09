@@ -1,5 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 
+//helper function
+import { fetchTracks } from "./fetchTracks";
+
 // types
 import { InfoTypes } from "./../interfaces/InfoInterface";
 
@@ -10,18 +13,9 @@ export default function MainProvider({ children }: any) {
   const [tracks, setTracks] = useState([]);
   const [play, setPlay] = useState(false);
   const [loop, setLoop] = useState(false);
-  const [shuffle, setShuffle] = useState(false);
 
   useEffect(() => {
-    const contentful = require("contentful");
-    const client = contentful.createClient({
-      space: process.env.REACT_APP_CONTENTFUL_SPACE,
-      accessToken: process.env.REACT_APP_CONTENTFUL_API,
-    });
-    client
-      .getEntries({ content_type: "track" })
-      .then((res: any) => setTracks(res.items))
-      .catch((err: any) => console.log(err));
+    fetchTracks("zh-Hant-TW", (data: any) => setTracks(data));
   }, []);
 
   return (
@@ -35,8 +29,6 @@ export default function MainProvider({ children }: any) {
         setPlay,
         loop,
         setLoop,
-        shuffle,
-        setShuffle,
       }}
     >
       {children}

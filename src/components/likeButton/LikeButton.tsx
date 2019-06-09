@@ -1,4 +1,5 @@
 import React, { memo, useContext } from "react";
+import { useTranslation } from "react-i18next";
 
 // contenxt
 import { UserContext } from "./../../context/UserContext";
@@ -14,6 +15,7 @@ export default memo(function LikeButton({
   item: any;
   liked: boolean;
 }) {
+  const { t } = useTranslation(null, { useSuspense: false });
   const { user, setUser } = useContext(UserContext);
   const { tracks } = useContext(MainContext);
 
@@ -82,7 +84,9 @@ export default memo(function LikeButton({
   return (
     <button
       className={liked ? style["like-btn"] : style["like-btn-unliked"]}
-      title={`${liked ? "Unlike" : "Like"} ${item ? item.fields.name : ""}`}
+      title={`${liked ? t("buttons.unlike") : t("buttons.like")} ${
+        item ? item.fields.name : ""
+      }`}
       onClick={() => handleClick()}
     >
       <i className="sm-heart" />

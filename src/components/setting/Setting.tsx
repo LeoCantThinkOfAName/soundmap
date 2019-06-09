@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect, useContext } from "react";
+import { useTranslation } from "react-i18next";
 
 // context
 import { UserContext } from "./../../context/UserContext";
@@ -11,6 +12,10 @@ import ListItem from "./ListItem";
 // styles
 import style from "./setting.module.scss";
 
+// contentful
+import { fetchTracks } from "./../../context/fetchTracks";
+import fetchContentful from "../oauth/fetchContentFul";
+
 export default memo(function Setting({
   active,
   setActive,
@@ -18,10 +23,11 @@ export default memo(function Setting({
   active: boolean;
   setActive: any;
 }) {
+  const { t, i18n } = useTranslation(null, { useSuspense: false });
   const [scrolled, setScrolled] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { setCenter } = useContext(MapContext);
-  const { setCurrent, setPlay } = useContext(MainContext);
+  const { setCurrent, setPlay, setTracks } = useContext(MainContext);
 
   useEffect(() => {}, [user]);
 
@@ -40,6 +46,19 @@ export default memo(function Setting({
     }
   };
 
+  const handleI18n = (lang: string) => {
+    i18n.changeLanguage(lang);
+    fetchContentful(user.id, lang, (userData: any) => {
+      setUser({
+        ...user,
+        favList: userData.favList,
+      });
+    });
+    fetchTracks(lang, (data: any) => {
+      setTracks(data);
+    });
+  };
+
   return (
     <div className={style["mask"]}>
       <div className={style["setting"]}>
@@ -50,7 +69,7 @@ export default memo(function Setting({
               : style["list-wrapper-double-edges"]
           }
         >
-          <div className={style["header"]}>Your Favorite Tracks</div>
+          <div className={style["header"]}>{t("settings.favorite-tracks")}</div>
           {active && (
             <ul className={style["list"]} onScroll={e => handleScroll(e)}>
               {user.favList.length > 0 &&
@@ -63,17 +82,29 @@ export default memo(function Setting({
 
         <div className={style["setting-control"]}>
           <button className={style["logout"]} onClick={() => signOut()}>
-            Log out
+            {t("buttons.logout")}
           </button>
           <div>
-            <button className={style["list-btn"]}>TW</button>
-            <button className={style["list-btn"]}>EN</button>
+            <button
+              className={style["list-btn"]}
+              title={t("settings.TW")}
+              onClick={() => handleI18n("tw")}
+            >
+              TW
+            </button>
+            <button
+              className={style["list-btn"]}
+              title={t("settings.EN")}
+              onClick={() => handleI18n("en")}
+            >
+              EN
+            </button>
           </div>
         </div>
 
         <button
           className={style["close"]}
-          title="close"
+          title={t("buttons.close")}
           onClick={() => setActive(false)}
         >
           ✕

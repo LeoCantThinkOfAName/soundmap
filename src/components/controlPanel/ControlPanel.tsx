@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, memo } from "react";
+import { useTranslation } from "react-i18next";
 
 // context
 import { MainContext } from "./../../context/MainContext";
@@ -20,10 +21,17 @@ declare global {
   }
 }
 
-export default function ControlPanel() {
-  const { current, setCurrent, tracks, play, setPlay } = useContext(
-    MainContext
-  );
+export default memo(function ControlPanel() {
+  const { t } = useTranslation(null, { useSuspense: false });
+  const {
+    current,
+    setCurrent,
+    tracks,
+    play,
+    setPlay,
+    loop,
+    setLoop,
+  } = useContext(MainContext);
   const { user } = useContext(UserContext);
   const { setCenter } = useContext(MapContext);
   const [buffered, setBuffered] = useState(true);
@@ -31,7 +39,6 @@ export default function ControlPanel() {
   const player = useRef<any>(null);
 
   useEffect(() => {
-    console.log(current);
     if (user && current) {
       const matched = user.favList.find(
         (item: any) => item.sys.id === current.sys.id
@@ -92,6 +99,25 @@ export default function ControlPanel() {
     }
   };
 
+  const handleShuffle = () => {
+    const randomNum = Math.floor(Math.random() * tracks.length);
+    const randomTrack = tracks[randomNum];
+    setCurrent(randomTrack);
+    setCenter({
+      lat: randomTrack.fields.coord.lat,
+      lng: randomTrack.fields.coord.lon,
+    });
+  };
+
+  const handleLoop = () => {
+    if (player.current.loop) {
+      player.current.loop = false;
+    } else {
+      player.current.loop = true;
+    }
+    setLoop(!loop);
+  };
+
   return (
     <div className={style["control-panel"]}>
       <div className={style["thumbnail-wrapper"]}>
@@ -109,31 +135,41 @@ export default function ControlPanel() {
           </div>
         </div>
         <div className={style["btns-wrapper"]}>
-          <button className={[style.btn].join(" ")} title="Shuffle">
+          <button
+            className={[style.btn].join(" ")}
+            title={t("buttons.shuffle")}
+            onClick={() => handleShuffle()}
+          >
             <i className="sm-shuffle" />
           </button>
           <button
             className={[style.btn].join(" ")}
-            title="Previous"
+            title={t("buttons.previous")}
             onClick={() => handleSkip(false)}
           >
             <i className="sm-backward" />
           </button>
           <button
             className={[style.btn, buffered ? null : style.spin].join(" ")}
-            title="Play"
+            title={play ? t("buttons.pause") : t("buttons.play")}
             onClick={() => handlePlayback()}
           >
             <PlayBtn playStatus={play} bufferStatus={buffered} />
           </button>
           <button
             className={[style.btn].join(" ")}
-            title="Next"
+            title={t("buttons.next")}
             onClick={() => handleSkip(true)}
           >
             <i className="sm-forward" />
           </button>
-          <button className={[style.btn].join(" ")} title="Loop">
+          <button
+            className={
+              loop ? [style.btn, style.loop].join(" ") : [style.btn].join(" ")
+            }
+            title={t("buttons.loop")}
+            onClick={() => handleLoop()}
+          >
             <i className="sm-loop" />
           </button>
         </div>
@@ -146,4 +182,4 @@ export default function ControlPanel() {
       </div>
     </div>
   );
-}
+});

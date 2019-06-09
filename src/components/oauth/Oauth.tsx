@@ -20,7 +20,7 @@ export default function Oauth() {
   const { user, setUser } = useContext(UserContext);
 
   const initUser = (profile: any) => {
-    fetchContentful(profile.getId(), (userData: any) => {
+    fetchContentful(profile.getId(), "zh-Hant-TW", (userData: any) => {
       setUser({
         name: profile.getName(),
         id: profile.getId(),

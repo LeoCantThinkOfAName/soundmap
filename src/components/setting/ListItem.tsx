@@ -1,4 +1,5 @@
 import React from "react";
+import { Translation } from "react-i18next";
 
 // components
 import LikeButton from "./../likeButton/LikeButton";
@@ -39,20 +40,28 @@ export default function ListItem(
         {item.fields.name}
       </p>
       <div>
-        <button
-          className={[style["list-btn"], style["navigate"]].join(" ")}
-          title={`Go to ${item.fields.name}`}
-          onClick={() => handleNav()}
-        >
-          <i className="sm-compass" />
-        </button>
-        <button
-          className={[style["list-btn"], style["play"]].join(" ")}
-          title={`Play This Track.`}
-          onClick={() => handlePlay()}
-        >
-          <i className="sm-play" />
-        </button>
+        <Translation>
+          {t => (
+            <button
+              className={[style["list-btn"], style["navigate"]].join(" ")}
+              title={`${t("buttons.goto")} ${item.fields.name}`}
+              onClick={() => handleNav()}
+            >
+              <i className="sm-compass" />
+            </button>
+          )}
+        </Translation>
+        <Translation>
+          {t => (
+            <button
+              className={[style["list-btn"], style["play"]].join(" ")}
+              title={`${t("buttons.play")} This Track.`}
+              onClick={() => handlePlay()}
+            >
+              <i className="sm-play" />
+            </button>
+          )}
+        </Translation>
       </div>
     </li>
   );

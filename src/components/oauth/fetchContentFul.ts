@@ -1,4 +1,4 @@
-export default (gId: string, callback: any) => {
+export default (gId: string, lang: string, callback: any) => {
   const contentful = require("contentful");
   const client = contentful.createClient({
     space: process.env.REACT_APP_CONTENTFUL_SPACE,
@@ -8,6 +8,7 @@ export default (gId: string, callback: any) => {
     .getEntries({
       content_type: "user",
       "fields.gid[in]": `${parseInt(gId)}`,
+      locale: lang,
     })
     .then((res: any) => {
       const userData = {
