@@ -1,0 +1,25 @@
+{
+  "app-name": "Taipei Sound Map",
+  "select-a-location-to-play": "Select a location to play",
+  "noname": "No Author",
+  "buttons": {
+    "play": "Play",
+    "pause": "Pause",
+    "next": "Next",
+    "previous": "Previous",
+    "shuffle": "Shuffle",
+    "loop": "Loop",
+    "like": "Like",
+    "unlike": "Unlike",
+    "goto": "Go To ",
+    "personal-setting": "Personal Setting and Favorite Tracks",
+    "login": "Login With Google Account",
+    "logout": "Log out",
+    "close": "Close"
+  },
+  "settings": {
+    "favorite-tracks": "Your Favorite Tracks",
+    "TW": "切換正體中文。",
+    "EN": "Change To English."
+  }
+}
