@@ -1,4 +1,5 @@
 import React, { useState, useContext, memo } from "react";
+import { useTranslation } from "react-i18next";
 
 // context
 import { UserContext } from "../../context/UserContext";
@@ -28,6 +29,7 @@ const transitionStyles: { [id: string]: React.CSSProperties } = {
 };
 
 export default memo(function Avatar() {
+  const { t } = useTranslation(null, { useSuspense: false });
   const { user } = useContext(UserContext);
   const [active, setActive] = useState(false);
 
@@ -37,15 +39,15 @@ export default memo(function Avatar() {
         <button
           className={style["avatar-wrapper"]}
           id="loginBtn"
-          title="Login with google"
+          title={t("buttons.login")}
         >
-          <img src={googleIcon} alt="Login with Google" />
+          <img src={googleIcon} alt={t("buttons.login")} />
         </button>
       ) : (
         <>
           <button
             className={style["avatar-wrapper"]}
-            title="Personal Setting And Playlist"
+            title={t("buttons.personal-setting")}
             onClick={() => setActive(true)}
           >
             <img src={user ? user.img : googleIcon} alt="profile" />
